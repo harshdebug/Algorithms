@@ -1,59 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Graphs;
 
-public class Graph
+public class TopSort
 {
-    Dictionary<int, Vertex> map = new Dictionary<int, Vertex>();
-    List<Edge> lst = new List<Edge>();
-
-    public class Vertex
-    {
-        public int id;
-        public bool visited;
-        public Vertex(int id)
-        {
-            this.id = id;
-            this.visited = false;
-        }
-
-        public List<Vertex> adjList = new List<Vertex>();
-    }
-
-    public class Edge
-    {
-        public Vertex v1;
-        public Vertex v2;
-        public bool directed;
-
-        public Edge(Vertex a, Vertex b, bool directed = true)
-        {
-            this.v1 = a;
-            this.v2 = b;
-            this.directed = directed;
-        }
-    }
-
-    public Vertex AddVertex(int id)
-    {
-        Vertex v = new Vertex(id);
-        this.map.Add(id, v);
-        return v;
-    }
-
-    public void AddEdge(Vertex a, Vertex b, bool directed = true)
-    {
-        a.adjList.Add(b);
-
-        if (!directed)
-        {
-            b.adjList.Add(a);
-        }
-
-        Edge e = new Edge(a, b, directed);
-        this.lst.Add(e);
-    }
-
     public void PrintDFS(Vertex v)
     {
         HashSet<Vertex> visited = new HashSet<Vertex>();
@@ -97,12 +48,12 @@ public class Graph
         }
     }
 
-    public void PrintTopologicalSort()
+    public void PrintTopologicalSort(Graph g)
     {
         Stack<Vertex> stk = new Stack<Vertex>();
         HashSet<Vertex> visited = new HashSet<Vertex>();
 
-        foreach (Vertex v in map.Values)
+        foreach (Vertex v in g.map.Values)
         {
             TopSortUtil(v, visited, stk);
         }
@@ -129,50 +80,45 @@ public class Graph
         }
         stk.Push(v);
     }
-
-    public void ResetVisited()
+   
+    public static void Main()
     {
-        foreach (Vertex v in map.Values)
-        {
-            v.visited = false;
-        }
+        TopSort srt = new TopSort();
+        srt.Test();
     }
-
 
     public void Test()
     {
-        Vertex one = AddVertex(1);
-        Vertex two = AddVertex(2);
-        Vertex three = AddVertex(3);
-        Vertex four = AddVertex(4);
-        Vertex five = AddVertex(5);
-        Vertex six = AddVertex(6);
-        Vertex seven = AddVertex(7);
+        Graph g = new Graph();
 
-        AddEdge(one, two, true);
-        AddEdge(one, four, true);
-        AddEdge(two, three, true);
-        AddEdge(three, five, true);
-        AddEdge(four, two, true);
-        AddEdge(four, six, true);
-        AddEdge(five, seven, true);
+        Vertex one = g.AddVertex(1);
+        Vertex two = g.AddVertex(2);
+        Vertex three = g.AddVertex(3);
+        Vertex four = g.AddVertex(4);
+        Vertex five = g.AddVertex(5);
+        Vertex six = g.AddVertex(6);
+        Vertex seven = g.AddVertex(7);
+
+        g.AddEdge(one, two, true);
+        g.AddEdge(one, four, true);
+        g.AddEdge(two, three, true);
+        g.AddEdge(three, five, true);
+        g.AddEdge(four, two, true);
+        g.AddEdge(four, six, true);
+        g.AddEdge(five, seven, true);
 
         Console.WriteLine("DFS");
         PrintDFS(one);
-        ResetVisited();
+
 
         Console.WriteLine("BFS");
         PrintBFS(one);
 
         Console.WriteLine("Topological Sort");
-        PrintTopologicalSort();
+        PrintTopologicalSort(g);
 
-        ResetVisited();
+
     }
 
-    public static void Main()
-    {
-        Graph g = new Graph();
-        g.Test();
-    }
+
 }
