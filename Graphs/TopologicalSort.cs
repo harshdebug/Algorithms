@@ -80,7 +80,7 @@ public class TopSort
         }
         stk.Push(v);
     }
-   
+
     public static void Main()
     {
         TopSort srt = new TopSort();
