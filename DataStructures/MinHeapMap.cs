@@ -16,7 +16,7 @@ public class MinHeapMap<T>
 	}
 
 	List<Item> lst = new List<Item>();
-	Dictionary<T, int> dict = new Dictionary<T, int>();
+	public Dictionary<T, int> dict = new Dictionary<T, int>();
 
 	int Left(int i)
 	{
@@ -32,6 +32,11 @@ public class MinHeapMap<T>
 	{
 		return (i - 1) / 2;
 	}
+
+    public int Count()
+    {
+        return lst.Count;
+    }
 
 	public void Enqueue(T val, int priority)
 	{
@@ -66,6 +71,11 @@ public class MinHeapMap<T>
 			Sink(dict[val]);
 		}
 	}
+
+    public int GetPriority(T item)
+    {
+        return lst[dict[item]].priority;
+    }
 
 	private void Swim(int i)
 	{
@@ -122,7 +132,7 @@ public class MinHeapMap<T>
 
 public class MinHeapMapTest
 {
-	public static void Main(string[] args)
+	public static void Main5(string[] args)
 	{
 		MinHeapMap<string> pq = new MinHeapMap<string>();
 		pq.Enqueue("Bob", 5);

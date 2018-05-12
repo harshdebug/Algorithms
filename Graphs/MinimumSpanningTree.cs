@@ -38,6 +38,57 @@ public class MST
         return mst;
     }
 
+
+    List<Edge> PrimsMST(Graph g)
+    {
+        Dictionary<int, Edge> map = new Dictionary<int, Edge>();
+        MinHeapMap<Vertex> queue = new MinHeapMap<Vertex>();
+
+        List<Edge> mst = new List<Edge>();
+
+        List<Vertex> allVertex = new List<Vertex>(g.allVertex.Values);
+        Vertex start = allVertex[0];
+
+        foreach(Vertex v in allVertex)
+        {
+            queue.Enqueue(v, int.MaxValue);
+        }
+
+        queue.UpdatePriority(start, 0);
+        HashSet<Vertex> visited = new HashSet<Vertex>();
+        visited.Add(start);
+
+
+        while(queue.Count() > 0)
+        {
+            Vertex cur = queue.Dequeue();
+            visited.Add(cur);
+            if(map.ContainsKey(cur.id))
+            {
+                mst.Add(map[cur.id]);
+            }
+
+            foreach (Edge e in cur.adjEdge)
+            {
+                Vertex adj = g.GetAdjVertexForEdge(cur, e);
+                if (!visited.Contains(adj) && queue.GetPriority(adj) > e.weight)
+                {
+                    queue.UpdatePriority(adj, e.weight);
+                    if(!map.ContainsKey(adj.id))
+                    {
+                        map.Add(adj.id, e);
+                    }
+                    else
+                    {
+                        map[adj.id] = e;
+                    }
+                }
+            }
+        }
+        return mst;
+
+    }
+
     public class EdgeComparer : IComparer<Edge>
     {
         public int Compare(Edge e1, Edge e2)
@@ -67,11 +118,13 @@ public class MST
         g.AddEdge(c, f, 4);
         g.AddEdge(f, e, 2);
 
-        List<Edge> mst = this.KruskalMST(g);
+        List<Edge> kmst = this.KruskalMST(g);
+        List<Edge> mst = this.PrimsMST(g);
         foreach (Edge ed in mst)
         {
             Console.WriteLine(ed.v1.id + " " + ed.v2.id);
         }
+        Console.WriteLine();
     }
 
     public static void Main()
