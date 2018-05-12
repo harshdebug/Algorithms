@@ -36,20 +36,20 @@ namespace Graphs
         {
         }
 
-        public Dictionary<int, Vertex> map = new Dictionary<int, Vertex>();
-        public List<Edge> lst = new List<Edge>();
+        public Dictionary<int, Vertex> allVertex = new Dictionary<int, Vertex>();
+        public List<Edge> allEdges = new List<Edge>();
 
         public Vertex AddVertex(int id)
         {
             Vertex v = new Vertex(id);
-            map.Add(id, v);
+            allVertex.Add(id, v);
             return v;
         }
 
         public void AddEdge(Vertex v1, Vertex v2, bool directed = false, int weight = 0)
         {
             Edge e = new Edge(v1, v2, directed, weight);
-            lst.Add(e);
+            allEdges.Add(e);
 
             v1.adjList.Add(v2);
             if (!directed)
