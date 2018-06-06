@@ -145,9 +145,30 @@ class Puzzles
         return total;
     }
 
+    // Regular expression Matching
+    public bool IsMatch(string s, string p) {        
+        if(String.IsNullOrEmpty(p))
+        {
+            return String.IsNullOrEmpty(s);
+        }
+        
+        bool firstMatch = (!String.IsNullOrEmpty(s) && (s[0].Equals(p[0]) || p[0].Equals('.')));
+        
+        if(p.Length >=2 && p[1].Equals('*'))
+        {
+            return (IsMatch(s, p.Substring(2)) || (firstMatch && IsMatch(s.Substring(1), p)));
+        }
+        else
+        {
+            return firstMatch && IsMatch(s.Substring(1), p.Substring(1));
+        }              
+    }
+
 	public static void Main(string[] args)
 	{
 		Puzzles mc = new Puzzles();
+
+        Console.WriteLine("a* IsMatch aa = "+mc.IsMatch("aa", "a*"));
 
 		int[] coins = { 2, 5, 10 };
 		int m = mc.MinCoins(coins, 53);
